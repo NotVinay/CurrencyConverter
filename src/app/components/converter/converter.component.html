@@ -1,0 +1,16 @@
+<div>
+  <input [(ngModel)]="fromCurrency.value" type="number" placeholder="0.00" (keyup)="fromValueChanged($event)" />
+  <select [(ngModel)]="fromCurrency.code" name="fromCurrencyCode" (change)="selectsChanged()">
+    <option *ngFor="let currency of currencies" [ngValue]="currency.currency_code">
+      {{ currency.currency_code + " " + currency.currency_name }}
+    </option>
+  </select>
+</div>
+<div>
+  <input [(ngModel)]="toCurrency.value" type="number" placeholder="0.00" (keyup)="toValueChanged($event)" />
+  <select [(ngModel)]="toCurrency.code" name="toCurrencyCode" (change)="selectsChanged()">
+    <option *ngFor="let currency of currencies" [ngValue]="currency.currency_code">
+      {{ currency.currency_code + " " + currency.currency_name }}
+    </option>
+  </select>
+</div>
