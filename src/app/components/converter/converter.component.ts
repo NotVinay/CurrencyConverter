@@ -29,9 +29,11 @@ export class ConverterComponent implements OnInit {
     this.currencies = SUPPORTED_CURRENCIES;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.fetchExchnangeRates();
+  }
 
-  selectsChanged() {
+  fetchExchnangeRates() {
     this.exchangeRatesService
       .fetchExchangeRate(this.fromCurrency.code, this.toCurrency.code)
       .subscribe(data => {
@@ -41,11 +43,19 @@ export class ConverterComponent implements OnInit {
       });
   }
 
+  selectsChanged() {
+    this.fetchExchnangeRates();
+  }
+
   fromValueChanged(event: any) {
-    this.toCurrency.value = event.target.value * this.fromCurrency.rate;
+    this.toCurrency.value = Number(
+      (event.target.value * this.fromCurrency.rate).toFixed(2)
+    );
   }
 
   toValueChanged(event: any) {
-    this.fromCurrency.value = event.target.value * this.toCurrency.rate;
+    this.fromCurrency.value = Number(
+      (event.target.value * this.toCurrency.rate).toFixed(2)
+    );
   }
 }
