@@ -7,14 +7,17 @@ import cytoscape from "cytoscape";
   templateUrl: "./graph.component.html",
   styleUrls: ["./graph.component.css"]
 })
+//const MONTHS = {};
 export class GraphComponent implements OnInit {
   cy: any;
   elements: any;
 
-  private _historicalRates = {};
+  private _historicalRates;
   @Input() set historicalRates(historicalRates: Object) {
     this._historicalRates = historicalRates;
-    this.updateGraph();
+    if (this._historicalRates != undefined) {
+      this.updateGraph();
+    }
   }
 
   constructor() {}
@@ -53,17 +56,6 @@ export class GraphComponent implements OnInit {
         rows: 1
       }
     });
-
-    // this.elements = this.cy.add([
-    //   { group: "nodes", data: { id: "n0" }, position: { x: 40, y: 500 } },
-    //   { group: "nodes", data: { id: "n1" }, position: { x: 500, y: 40 } },
-    //   { group: "edges", data: { id: "e0", source: "n0", target: "n1" } }
-    // ]);
-    this.elements = this.cy.add(this.getElements());
-    this.cy.fit(this.elements, 10); // to fit the elements to canvas
-    this.cy.autolock(true); // to lock the nodes in place
-    this.cy.zoomingEnabled(false); // to disable zooming
-    this.cy.panningEnabled(false);
   }
 
   getMaxRate() {
@@ -86,7 +78,7 @@ export class GraphComponent implements OnInit {
     return min;
   }
 
-  getElements() {
+  generateElements() {
     let elements = [];
     const YAxisLength = this.cy.height();
     const XAxisLength = this.cy.width();
@@ -105,7 +97,10 @@ export class GraphComponent implements OnInit {
           YAxisLength;
       elements.push({
         group: "nodes",
-        data: { id: key, label: key + " - " + this._historicalRates[key] },
+        data: {
+          id: key,
+          label: key + " - " + this._historicalRates[key].toFixed(2)
+        },
         position: { x: xCoordinate, y: yCoordinate }
       });
       i += 1;
@@ -121,9 +116,37 @@ export class GraphComponent implements OnInit {
     return elements;
   }
 
+  updateElements() {
+    const YAxisLength = this.cy.height();
+    const XAxisLength = this.cy.width();
+    console.log("X Length", XAxisLength, "Y Length: ", YAxisLength);
+    const minRate = this.getMinRate();
+    const maxRate = this.getMaxRate(); //adding nodes
+    var i = 1;
+    var keys = Object.keys(this._historicalRates);
+    keys.map(key => {
+      const xCoordinate = (i / 12) * XAxisLength;
+      const yCoordinate =
+        YAxisLength -
+        ((this._historicalRates[key] - minRate) / (maxRate - minRate)) *
+          YAxisLength;
+      this.cy.$("#" + key).data({
+        label: key + " - " + this._historicalRates[key].toFixed(2)
+      });
+      this.cy.$("#" + key).position({ x: xCoordinate, y: yCoordinate });
+      i += 1;
+    });
+  }
+
   updateGraph() {
-    this.elements = this.cy.add(this.getElements());
-    this.cy.fit(this.elements, 10); // to fit the elements to canvas
+    if (this.elements) {
+      //this.cy.remove(this.elements);
+      this.cy.autolock(false); // to lock the nodes in place
+      this.updateElements();
+    } else {
+      this.elements = this.cy.add(this.generateElements());
+    }
+    this.cy.fit(this.elements, 2); // to fit the elements to canvas
     this.cy.autolock(true); // to lock the nodes in place
     this.cy.zoomingEnabled(false); // to disable zooming
     this.cy.panningEnabled(false);

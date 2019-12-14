@@ -62,14 +62,12 @@ export class ConverterComponent implements OnInit {
   }
 
   fromValueChanged(event: any) {
-    this.toCurrency.value = Number(
-      (event.target.value * this.fromCurrency.rate).toFixed(2)
-    );
+    this.toCurrency.value =
+      Math.round(event.target.value * this.fromCurrency.rate * 100) / 100;
   }
 
   toValueChanged(event: any) {
-    this.fromCurrency.value = Number(
-      (event.target.value * this.toCurrency.rate).toFixed(2)
-    );
+    this.fromCurrency.value =
+      Math.round(event.target.value * this.toCurrency.rate * 100) / 100;
   }
 }
