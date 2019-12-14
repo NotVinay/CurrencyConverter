@@ -1,14 +1,27 @@
 import { Component, OnInit, Input } from "@angular/core";
 
 import cytoscape from "cytoscape";
-import { timeout } from "q";
+
+const MONTHS = {
+  "01": "Jan",
+  "02": "Feb",
+  "03": "Mar",
+  "04": "Apr",
+  "05": "May",
+  "06": "Jun",
+  "07": "Jul",
+  "08": "Aug",
+  "09": "Sep",
+  "10": "Oct",
+  "11": "Nov",
+  "12": "Dec"
+};
 
 @Component({
   selector: "app-graph",
   templateUrl: "./graph.component.html",
   styleUrls: ["./graph.component.css"]
 })
-//const MONTHS = {};
 export class GraphComponent implements OnInit {
   cy: any;
   elements: any;
@@ -26,9 +39,6 @@ export class GraphComponent implements OnInit {
   ngOnInit() {
     this.cy = cytoscape({
       container: document.getElementById("historical-rates-graph"), // container to render in
-
-      elements: [],
-
       style: [
         // the stylesheet for the graph
         {
@@ -50,12 +60,7 @@ export class GraphComponent implements OnInit {
             "target-arrow-shape": "triangle"
           }
         }
-      ],
-
-      layout: {
-        name: "grid",
-        rows: 1
-      }
+      ]
     });
   }
 
@@ -100,7 +105,12 @@ export class GraphComponent implements OnInit {
         group: "nodes",
         data: {
           id: key,
-          label: key + " - " + this._historicalRates[key].toFixed(2)
+          label:
+            MONTHS[key.substr(5, 7)] +
+            " " +
+            key.substr(0, 4) +
+            " - " +
+            this._historicalRates[key].toFixed(2)
         },
         position: { x: xCoordinate, y: yCoordinate }
       });
@@ -132,7 +142,10 @@ export class GraphComponent implements OnInit {
         ((this._historicalRates[key] - minRate) / (maxRate - minRate)) *
           YAxisLength;
       this.cy.$("#" + key).data({
-        label: key + " - " + this._historicalRates[key].toFixed(2)
+        label:
+          MONTHS[key.substr(5, 7)] +
+          " - " +
+          this._historicalRates[key].toFixed(2)
       });
       this.cy.elements("node#" + key).animate(
         {
@@ -155,7 +168,7 @@ export class GraphComponent implements OnInit {
     } else {
       this.elements = this.cy.add(this.generateElements());
     }
-    this.cy.fit(this.elements, 2); // to fit the elements to canvas
+    this.cy.fit(this.elements, 20); // to fit the elements to canvas
     this.cy.zoomingEnabled(false); // to disable zooming
     this.cy.panningEnabled(false);
     setTimeout(() => {

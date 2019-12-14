@@ -33,11 +33,11 @@ export class ConverterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fetchExchnangeRates();
+    this.fetchExchangeRates();
     this.fetchHistoricalRates();
   }
 
-  fetchExchnangeRates() {
+  fetchExchangeRates() {
     this.exchangeRatesService
       .fetchExchangeRate(this.fromCurrency.code, this.toCurrency.code)
       .subscribe(data => {
@@ -57,7 +57,10 @@ export class ConverterComponent implements OnInit {
   }
 
   selectsChanged() {
-    this.fetchExchnangeRates();
+    this.fetchExchangeRates();
+    this.toCurrency.value =
+      Math.round(this.fromCurrency.value * this.fromCurrency.rate * 100) / 100;
+    console.log(this.fromCurrency);
     this.fetchHistoricalRates();
   }
 

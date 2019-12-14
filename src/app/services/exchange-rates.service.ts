@@ -30,6 +30,7 @@ export class ExchangeRatesService {
     const queryString = Object.keys(params)
       .map(key => key + "=" + params[key])
       .join("&");
+
     const reqUrl: string = `${this.exchangeRatesUrl}/${this.latest}?${queryString}`;
     return this.http.get(reqUrl, httpOptions);
   }
@@ -74,7 +75,7 @@ export class ExchangeRatesService {
           grouped[key.substring(0, 7)] = [];
         }
       });
-
+    delete grouped[Object.keys(grouped)[0]];
     // getting average rates over each month
     Object.keys(grouped)
       .sort()
