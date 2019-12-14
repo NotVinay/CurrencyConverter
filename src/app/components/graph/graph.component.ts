@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 
 import cytoscape from "cytoscape";
+import { timeout } from "q";
 
 @Component({
   selector: "app-graph",
@@ -133,7 +134,15 @@ export class GraphComponent implements OnInit {
       this.cy.$("#" + key).data({
         label: key + " - " + this._historicalRates[key].toFixed(2)
       });
-      this.cy.$("#" + key).position({ x: xCoordinate, y: yCoordinate });
+      this.cy.elements("node#" + key).animate(
+        {
+          position: { x: xCoordinate, y: yCoordinate }
+        },
+        {
+          duration: 1000
+        }
+      );
+      //.position({ x: xCoordinate, y: yCoordinate });
       i += 1;
     });
   }
@@ -147,8 +156,10 @@ export class GraphComponent implements OnInit {
       this.elements = this.cy.add(this.generateElements());
     }
     this.cy.fit(this.elements, 2); // to fit the elements to canvas
-    this.cy.autolock(true); // to lock the nodes in place
     this.cy.zoomingEnabled(false); // to disable zooming
     this.cy.panningEnabled(false);
+    setTimeout(() => {
+      this.cy.autolock(true); // to lock the nodes in place
+    }, 1000);
   }
 }
