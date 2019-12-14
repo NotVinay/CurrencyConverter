@@ -39,7 +39,9 @@ export class GraphComponent implements OnInit {
           selector: "node",
           style: {
             "background-color": "#666",
-            label: "data(id)"
+            label: "data(label)",
+            height: 25,
+            width: 25
           }
         },
 
@@ -66,7 +68,7 @@ export class GraphComponent implements OnInit {
     //   { group: "edges", data: { id: "e0", source: "n0", target: "n1" } }
     // ]);
     this.elements = this.cy.add(this.getElements());
-    this.cy.fit(this.elements); // to fit the elements to canvas
+    this.cy.fit(this.elements, 10); // to fit the elements to canvas
     this.cy.autolock(true); // to lock the nodes in place
     this.cy.zoomingEnabled(false); // to disable zooming
     this.cy.panningEnabled(false);
@@ -100,19 +102,29 @@ export class GraphComponent implements OnInit {
     const minRate = this.getMinRate();
     const maxRate = this.getMaxRate();
 
+    //adding nodes
     var i = 1;
-    Object.keys(this.data).map(key => {
+    var keys = Object.keys(this.data);
+    keys.map(key => {
       const xCoordinate = (i / 12) * XAxisLength;
       const yCoordinate =
         YAxisLength -
         ((this.data[key] - minRate) / (maxRate - minRate)) * YAxisLength;
       elements.push({
         group: "nodes",
-        data: { id: key + " - " + this.data[key] },
+        data: { id: key, label: key + " - " + this.data[key] },
         position: { x: xCoordinate, y: yCoordinate }
       });
       i += 1;
     });
+
+    // adding edges
+    for (i = 0; i < keys.length - 1; i++) {
+      elements.push({
+        group: "edges",
+        data: { id: "e" + i, source: keys[i], target: keys[i + 1] }
+      });
+    }
     return elements;
   }
 }
