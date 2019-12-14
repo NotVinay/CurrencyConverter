@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input } from "@angular/core";
 
 import cytoscape from "cytoscape";
 
@@ -11,20 +11,12 @@ export class GraphComponent implements OnInit {
   cy: any;
   elements: any;
 
-  data = {
-    "2019-1-1": 89.3,
-    "2019-2-1": 87.3,
-    "2019-3-1": 88.6,
-    "2019-4-1": 89.9,
-    "2019-5-1": 90.5,
-    "2019-6-1": 86.94,
-    "2019-7-1": 93.54,
-    "2019-8-1": 92.34,
-    "2019-9-1": 89.45,
-    "2019-10-1": 88.87,
-    "2019-11-1": 87.86,
-    "2019-12-1": 86.24
-  };
+  private _historicalRates = {};
+  @Input() set historicalRates(historicalRates: Object) {
+    this._historicalRates = historicalRates;
+    this.updateGraph();
+  }
+
   constructor() {}
 
   ngOnInit() {
@@ -76,9 +68,9 @@ export class GraphComponent implements OnInit {
 
   getMaxRate() {
     let max = 0;
-    Object.keys(this.data).map(key => {
-      if (this.data[key] > max) {
-        max = this.data[key];
+    Object.keys(this._historicalRates).map(key => {
+      if (this._historicalRates[key] > max) {
+        max = this._historicalRates[key];
       }
     });
     return max;
@@ -86,9 +78,9 @@ export class GraphComponent implements OnInit {
 
   getMinRate() {
     let min = Number.MAX_VALUE;
-    Object.keys(this.data).map(key => {
-      if (this.data[key] < min) {
-        min = this.data[key];
+    Object.keys(this._historicalRates).map(key => {
+      if (this._historicalRates[key] < min) {
+        min = this._historicalRates[key];
       }
     });
     return min;
@@ -104,15 +96,16 @@ export class GraphComponent implements OnInit {
 
     //adding nodes
     var i = 1;
-    var keys = Object.keys(this.data);
+    var keys = Object.keys(this._historicalRates);
     keys.map(key => {
       const xCoordinate = (i / 12) * XAxisLength;
       const yCoordinate =
         YAxisLength -
-        ((this.data[key] - minRate) / (maxRate - minRate)) * YAxisLength;
+        ((this._historicalRates[key] - minRate) / (maxRate - minRate)) *
+          YAxisLength;
       elements.push({
         group: "nodes",
-        data: { id: key, label: key + " - " + this.data[key] },
+        data: { id: key, label: key + " - " + this._historicalRates[key] },
         position: { x: xCoordinate, y: yCoordinate }
       });
       i += 1;
@@ -126,5 +119,13 @@ export class GraphComponent implements OnInit {
       });
     }
     return elements;
+  }
+
+  updateGraph() {
+    this.elements = this.cy.add(this.getElements());
+    this.cy.fit(this.elements, 10); // to fit the elements to canvas
+    this.cy.autolock(true); // to lock the nodes in place
+    this.cy.zoomingEnabled(false); // to disable zooming
+    this.cy.panningEnabled(false);
   }
 }

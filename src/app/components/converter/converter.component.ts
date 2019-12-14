@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import SUPPORTED_CURRENCIES from "../../shared/currencies";
 import { ExchangeRatesService } from "../../services/exchange-rates.service";
+
 @Component({
   selector: "app-converter",
   templateUrl: "./converter.component.html",
@@ -24,6 +25,8 @@ export class ConverterComponent implements OnInit {
     rate: 0
   };
 
+  historicalRates: Object;
+
   constructor(private exchangeRatesService: ExchangeRatesService) {
     console.log(SUPPORTED_CURRENCIES);
     this.currencies = SUPPORTED_CURRENCIES;
@@ -31,6 +34,7 @@ export class ConverterComponent implements OnInit {
 
   ngOnInit() {
     this.fetchExchnangeRates();
+    this.fetchHistoricalRates();
   }
 
   fetchExchnangeRates() {
@@ -43,8 +47,18 @@ export class ConverterComponent implements OnInit {
       });
   }
 
+  fetchHistoricalRates() {
+    this.exchangeRatesService
+      .fetchHistoricalRates(this.fromCurrency.code, this.toCurrency.code)
+      .subscribe(data => {
+        console.log("Historical Rates response", data);
+        this.historicalRates = data;
+      });
+  }
+
   selectsChanged() {
     this.fetchExchnangeRates();
+    this.fetchHistoricalRates();
   }
 
   fromValueChanged(event: any) {
