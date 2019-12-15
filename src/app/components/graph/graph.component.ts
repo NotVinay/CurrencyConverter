@@ -1,4 +1,8 @@
-import { Component, OnInit, Input } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input
+} from "@angular/core";
 
 import cytoscape from "cytoscape";
 
@@ -44,10 +48,10 @@ export class GraphComponent implements OnInit {
         {
           selector: "node",
           style: {
-            "background-color": "#666",
+            "background-color": "#ff6384",
             label: "data(label)",
-            height: 25,
-            width: 25
+            height: 20,
+            width: 20
           }
         },
 
@@ -55,7 +59,8 @@ export class GraphComponent implements OnInit {
           selector: "edge",
           style: {
             width: 3,
-            "line-color": "#ccc",
+            "line-color": "#f96899",
+            "opacity":0.5,
             "target-arrow-color": "#ccc",
             "target-arrow-shape": "triangle"
           }
@@ -93,24 +98,16 @@ export class GraphComponent implements OnInit {
     const maxRate = this.getMaxRate();
 
     //adding nodes
-    var i = 1;
+    var i = 0;
     var keys = Object.keys(this._historicalRates);
     keys.map(key => {
-      const xCoordinate = (i / 12) * XAxisLength;
-      const yCoordinate =
-        YAxisLength -
-        ((this._historicalRates[key] - minRate) / (maxRate - minRate)) *
-          YAxisLength;
+      const xCoordinate = (i / 11) * XAxisLength;
+      const yCoordinate = YAxisLength - ((this._historicalRates[key] - minRate) / (maxRate - minRate)) * YAxisLength;
       elements.push({
         group: "nodes",
         data: {
           id: key,
-          label:
-            MONTHS[key.substr(5, 7)] +
-            " " +
-            key.substr(0, 4) +
-            " - " +
-            this._historicalRates[key].toFixed(2)
+          label: `${MONTHS[key.substr(5, 7)]} ${key.substr(0, 4)} - ${this._historicalRates[key].toFixed(2)}`
         },
         position: { x: xCoordinate, y: yCoordinate }
       });
@@ -121,7 +118,11 @@ export class GraphComponent implements OnInit {
     for (i = 0; i < keys.length - 1; i++) {
       elements.push({
         group: "edges",
-        data: { id: "e" + i, source: keys[i], target: keys[i + 1] }
+        data: {
+          id: `e ${i}`,
+          source: keys[i],
+          target: keys[i + 1]
+        }
       });
     }
     return elements;
@@ -133,29 +134,20 @@ export class GraphComponent implements OnInit {
     console.log("X Length", XAxisLength, "Y Length: ", YAxisLength);
     const minRate = this.getMinRate();
     const maxRate = this.getMaxRate(); //adding nodes
-    var i = 1;
+    var i = 0;
     var keys = Object.keys(this._historicalRates);
     keys.map(key => {
-      const xCoordinate = (i / 12) * XAxisLength;
-      const yCoordinate =
-        YAxisLength -
-        ((this._historicalRates[key] - minRate) / (maxRate - minRate)) *
-          YAxisLength;
-      this.cy.$("#" + key).data({
-        label:
-          MONTHS[key.substr(5, 7)] +
-          " - " +
-          this._historicalRates[key].toFixed(2)
+      const xCoordinate = (i / 11) * XAxisLength;
+      const yCoordinate = YAxisLength - ((this._historicalRates[key] - minRate) / (maxRate - minRate)) * YAxisLength;
+      
+      this.cy.$(`node#${key}`).data({
+        label: `${MONTHS[key.substr(5, 7)]} ${key.substr(0, 4)} - ${this._historicalRates[key].toFixed(2)}`
       });
-      this.cy.elements("node#" + key).animate(
-        {
-          position: { x: xCoordinate, y: yCoordinate }
-        },
-        {
-          duration: 1000
-        }
-      );
-      //.position({ x: xCoordinate, y: yCoordinate });
+      this.cy.elements(`node#${key}`).animate({
+        position: { x: xCoordinate, y: yCoordinate }
+      }, {
+        duration: 1000
+      });
       i += 1;
     });
   }
@@ -168,9 +160,10 @@ export class GraphComponent implements OnInit {
     } else {
       this.elements = this.cy.add(this.generateElements());
     }
-    this.cy.fit(this.elements, 20); // to fit the elements to canvas
+    this.cy.fit(this.elements, 2); // to fit the elements to canvas
     this.cy.zoomingEnabled(false); // to disable zooming
     this.cy.panningEnabled(false);
+    
     setTimeout(() => {
       this.cy.autolock(true); // to lock the nodes in place
     }, 1000);

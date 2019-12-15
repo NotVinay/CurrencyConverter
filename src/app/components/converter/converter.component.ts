@@ -38,13 +38,18 @@ export class ConverterComponent implements OnInit {
   }
 
   fetchExchangeRates() {
-    this.exchangeRatesService
-      .fetchExchangeRate(this.fromCurrency.code, this.toCurrency.code)
+    let a = this;
+    var promise = new Promise(function(resolve, reject) {
+      a.exchangeRatesService
+      .fetchExchangeRate(a.fromCurrency.code, a.toCurrency.code)
       .subscribe(data => {
         console.log("ExchangeRatesAPI response", data);
-        this.fromCurrency.rate = data.rates[this.toCurrency.code];
-        this.toCurrency.rate = 1 / data.rates[this.toCurrency.code];
+        a.fromCurrency.rate = data.rates[a.toCurrency.code];
+        a.toCurrency.rate = 1 / data.rates[a.toCurrency.code];
+        resolve(true)
       });
+    });
+    return promise;
   }
 
   fetchHistoricalRates() {
@@ -57,20 +62,18 @@ export class ConverterComponent implements OnInit {
   }
 
   selectsChanged() {
-    this.fetchExchangeRates();
-    this.toCurrency.value =
-      Math.round(this.fromCurrency.value * this.fromCurrency.rate * 100) / 100;
-    console.log(this.fromCurrency);
+    this.fetchExchangeRates().then(()=>{
+      this.toCurrency.value = Math.round(this.fromCurrency.value * this.fromCurrency.rate * 100) / 100;
+      console.log(this.fromCurrency);
+    })
     this.fetchHistoricalRates();
   }
 
   fromValueChanged(event: any) {
-    this.toCurrency.value =
-      Math.round(event.target.value * this.fromCurrency.rate * 100) / 100;
+    this.toCurrency.value = Math.round(event.target.value * this.fromCurrency.rate * 100) / 100;
   }
 
   toValueChanged(event: any) {
-    this.fromCurrency.value =
-      Math.round(event.target.value * this.toCurrency.rate * 100) / 100;
+    this.fromCurrency.value = Math.round(event.target.value * this.toCurrency.rate * 100) / 100;
   }
 }

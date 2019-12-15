@@ -76,6 +76,7 @@ export class ExchangeRatesService {
         }
       });
     delete grouped[Object.keys(grouped)[0]];
+
     // getting average rates over each month
     Object.keys(grouped)
       .sort()
