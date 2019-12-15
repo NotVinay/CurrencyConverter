@@ -2,8 +2,9 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { environment } from '../../environments/environment';
 
-// setting headers
+// headers for http rquest
 const httpOptions = {
   headers: new HttpHeaders({
     "Content-Type": "application/json"
@@ -14,44 +15,51 @@ const httpOptions = {
   providedIn: "root"
 })
 export class ExchangeRatesService {
-  exchangeRatesUrl: string =
-    "https://cors-anywhere.herokuapp.com/https://api.exchangeratesapi.io"; // cors proxy is used to allow cross origin requests
-
   constructor(private http: HttpClient) {}
 
-  // FetchExchangeRate
+  /**
+   * Fetches exchange rate from api
+   * @param fromCurrency base currency code
+   * @param toCurrency currency code to convert to
+   */
   fetchExchangeRate(fromCurrency: string, toCurrency: string): Observable<any> {
-    const reqUrl: string = `${this.exchangeRatesUrl}/latest?base=${fromCurrency}&symbols=${toCurrency}`;
+    const reqUrl: string = `${environment.exchangeRatesApi}/latest?base=${fromCurrency}&symbols=${toCurrency}`;
     return this.http.get(reqUrl, httpOptions);
   }
 
-  // FetchHistoricalRates
+  /**
+   * Fetches exchange rates over last 12 months
+   * @param fromCurrency base currency code 
+   * @param toCurrency currency code to convert to 
+   */
   fetchHistoricalRates(
     fromCurrency: string,
     toCurrency: string
   ): Observable<any> {
     var endDate = new Date().toLocaleDateString("en-CA");
     const today = new Date();
-    var startDate = new Date(
-      today.setFullYear(today.getFullYear() - 1)
-    ).toLocaleDateString("en-CA");
-    const reqUrl: string = `${this.exchangeRatesUrl}/history?base=${fromCurrency}&symbols=${toCurrency}&start_at=${startDate}&end_at=${endDate}`;
+    var startDate = new Date(today.setFullYear(today.getFullYear() - 1)).toLocaleDateString("en-CA");
+    const reqUrl: string = `${environment.exchangeRatesApi}/history?base=${fromCurrency}&symbols=${toCurrency}&start_at=${startDate}&end_at=${endDate}`;
     return this.http.get(reqUrl, httpOptions).pipe(
       map((response: any) => {
-        console.log("Map data", response);
         return this.process(response.rates, toCurrency);
       })
     );
   }
 
-  process(data: any, toCurrency: string) {
+  /**
+   * Processes historical rates to find average rate over each month.
+   * @param historicalRates historical rates data to process
+   * @param toCurrency 
+   */
+  process(historicalRates: any, toCurrency: string) {
     // grouping by month
     var grouped = {};
-    Object.keys(data)
+    Object.keys(historicalRates)
       .sort()
       .map(key => {
         if (key.substring(0, 7) in grouped) {
-          grouped[key.substring(0, 7)].push(data[key][toCurrency]);
+          grouped[key.substring(0, 7)].push(historicalRates[key][toCurrency]);
         } else {
           grouped[key.substring(0, 7)] = [];
         }
