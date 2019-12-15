@@ -38,14 +38,14 @@ export class ConverterComponent implements OnInit {
   }
 
   fetchExchangeRates() {
-    let a = this;
+    let _this = this;
     var promise = new Promise(function(resolve, reject) {
-      a.exchangeRatesService
-      .fetchExchangeRate(a.fromCurrency.code, a.toCurrency.code)
+      _this.exchangeRatesService
+      .fetchExchangeRate(_this.fromCurrency.code, _this.toCurrency.code)
       .subscribe(data => {
         console.log("ExchangeRatesAPI response", data);
-        a.fromCurrency.rate = data.rates[a.toCurrency.code];
-        a.toCurrency.rate = 1 / data.rates[a.toCurrency.code];
+        _this.fromCurrency.rate = data.rates[_this.toCurrency.code];
+        _this.toCurrency.rate = 1 / data.rates[_this.toCurrency.code];
         resolve(true)
       });
     });

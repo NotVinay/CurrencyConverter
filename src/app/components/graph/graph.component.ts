@@ -71,21 +71,21 @@ export class GraphComponent implements OnInit {
 
   getMaxRate() {
     let max = 0;
-    Object.keys(this._historicalRates).map(key => {
+    for (const key in this._historicalRates) {
       if (this._historicalRates[key] > max) {
         max = this._historicalRates[key];
       }
-    });
+    };
     return max;
   }
 
   getMinRate() {
     let min = Number.MAX_VALUE;
-    Object.keys(this._historicalRates).map(key => {
+    for (const key in this._historicalRates) {
       if (this._historicalRates[key] < min) {
         min = this._historicalRates[key];
       }
-    });
+    };
     return min;
   }
 
@@ -135,8 +135,7 @@ export class GraphComponent implements OnInit {
     const minRate = this.getMinRate();
     const maxRate = this.getMaxRate(); //adding nodes
     var i = 0;
-    var keys = Object.keys(this._historicalRates);
-    keys.map(key => {
+    for (const key in this._historicalRates) {
       const xCoordinate = (i / 11) * XAxisLength;
       const yCoordinate = YAxisLength - ((this._historicalRates[key] - minRate) / (maxRate - minRate)) * YAxisLength;
       
@@ -149,7 +148,7 @@ export class GraphComponent implements OnInit {
         duration: 1000
       });
       i += 1;
-    });
+    };
   }
 
   updateGraph() {

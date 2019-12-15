@@ -16,22 +16,12 @@ const httpOptions = {
 export class ExchangeRatesService {
   exchangeRatesUrl: string =
     "https://cors-anywhere.herokuapp.com/https://api.exchangeratesapi.io"; // cors proxy is used to allow cross origin requests
-  latest: string = "latest";
-  history: string = "history";
 
   constructor(private http: HttpClient) {}
 
   // FetchExchangeRate
   fetchExchangeRate(fromCurrency: string, toCurrency: string): Observable<any> {
-    let params = {
-      base: fromCurrency,
-      symbols: toCurrency
-    };
-    const queryString = Object.keys(params)
-      .map(key => key + "=" + params[key])
-      .join("&");
-
-    const reqUrl: string = `${this.exchangeRatesUrl}/${this.latest}?${queryString}`;
+    const reqUrl: string = `${this.exchangeRatesUrl}/latest?base=${fromCurrency}&symbols=${toCurrency}`;
     return this.http.get(reqUrl, httpOptions);
   }
 
@@ -45,16 +35,7 @@ export class ExchangeRatesService {
     var startDate = new Date(
       today.setFullYear(today.getFullYear() - 1)
     ).toLocaleDateString("en-CA");
-    let params = {
-      base: fromCurrency,
-      symbols: toCurrency,
-      start_at: startDate,
-      end_at: endDate
-    };
-    const queryString = Object.keys(params)
-      .map(key => key + "=" + params[key])
-      .join("&");
-    const reqUrl: string = `${this.exchangeRatesUrl}/${this.history}?${queryString}`;
+    const reqUrl: string = `${this.exchangeRatesUrl}/history?base=${fromCurrency}&symbols=${toCurrency}&start_at=${startDate}&end_at=${endDate}`;
     return this.http.get(reqUrl, httpOptions).pipe(
       map((response: any) => {
         console.log("Map data", response);
