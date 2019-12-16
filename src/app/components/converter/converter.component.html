@@ -6,11 +6,17 @@
           <mat-label for="fromCurrencyCode">From</mat-label>
           <mat-select [(value)]="fromCurrency.code" id="fromCurrencyCode" name="fromCurrencyCode"
             (selectionChange)="selectsChanged('fromCurrency')" class="form-control">
-            <mat-option *ngFor="let currency of currencies" [value]="currency.currency_code">
+            <mat-select-trigger>
               <div class="option-icon">
-                <img alt="country flag" src="{{ currency.country_flag }}" />
+                <img alt="country flag" src="{{ fromCurrency.metaData.countryFlag }}" />
               </div>
-              {{ currency.currency_code + " " + currency.currency_name }}
+              {{ fromCurrency.code + " " + fromCurrency.metaData.currencyName }}
+            </mat-select-trigger>
+            <mat-option *ngFor="let currency of currencies" [value]="currency.currencyCode">
+              <div class="option-icon">
+                <img alt="country flag" src="{{ currency.countryFlag }}" />
+              </div>
+              {{ currency.currencyCode + " " + currency.currencyName }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -24,11 +30,17 @@
           <mat-label for="toCurrencyCode">To</mat-label>
           <mat-select [(value)]="toCurrency.code" id="toCurrencyCode" name="toCurrencyCode"
             (selectionChange)="selectsChanged('toCurrency')" class="form-control">
-            <mat-option *ngFor="let currency of currencies" [value]="currency.currency_code">
+            <mat-select-trigger>
               <div class="option-icon">
-                <img alt="country flag" src="{{ currency.country_flag }}" />
+                <img alt="country flag" src="{{ toCurrency.metaData.countryFlag }}" />
               </div>
-              {{ currency.currency_code + " " + currency.currency_name }}
+              {{ toCurrency.code + " " + toCurrency.metaData.currencyName }}
+            </mat-select-trigger>
+            <mat-option *ngFor="let currency of currencies" [value]="currency.currencyCode">
+              <div class="option-icon">
+                <img alt="country flag" src="{{ currency.countryFlag }}" />
+              </div>
+              {{ currency.currencyCode + " " + currency.currencyName }}
             </mat-option>
           </mat-select>
         </mat-form-field>

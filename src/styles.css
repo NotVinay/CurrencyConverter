@@ -10,7 +10,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-mat-option span {
+mat-option span, mat-select-trigger {
   display: inline-flex !important;
   align-items: center !important;
 }

@@ -135,6 +135,8 @@ export class GraphComponent implements OnInit {
     const XAxisLength = this.cy.width();
     const { minRate, maxRate } = this.getRatesBounds();
 
+    console.log("X-Axis", XAxisLength, "Y-Axis", YAxisLength);
+
     var i = 0;
     for (const key in this._historicalRates) {
       // calculating the position of the nodes relative to canvas
@@ -144,14 +146,18 @@ export class GraphComponent implements OnInit {
       this.cy.$(`node#${key}`).data({
         label: `${MONTHS[key.substr(5, 7)]} ${key.substr(0, 4)} - ${this._historicalRates[key].toFixed(2)}`
       });
+      if(key=="2019-12"){
+        console.log("X", xCoordinate, "Y", yCoordinate);
+      }
       this.cy.elements(`node#${key}`).animate({
         position: { x: xCoordinate, y: yCoordinate }
       }, {
-        duration: 1000
+        duration: 500
       });
       i += 1;
     };
   }
+  
 
   /**
    * Render's graph using the elements received from the parent component
