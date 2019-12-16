@@ -75,10 +75,10 @@ export class ConverterComponent implements OnInit {
   /**
    * This function is called when currency selects are changed.
    */
-  selectsChanged() {
+  selectsChanged(sender: string) {
+    const target = (sender == "fromCurrency") ? "toCurrency" : "fromCurrency";
     this.fetchExchangeRates().then(()=>{
-      this.toCurrency.value = Math.round(this.fromCurrency.value * this.fromCurrency.rate * 100) / 100;
-      console.log(this.fromCurrency);
+      this[target].value = Math.round(this[sender].value * this[sender].rate * 100) / 100;
     })
     this.fetchHistoricalRates();
   }

@@ -1,18 +1,15 @@
-.converter-container {
-  height: 400px;
-  max-width: 1140px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
 
+.caption {
+  color: rgb(55, 70, 154);
+}
+.muted-heading {
+  margin-top: 20px;
+  color: rgba(0,0,0,.54);
+}
 .option-icon {
   width: 40px;
   height: 40px;
-  display: flex;
+  display: inline-flex;
   overflow: hidden;
   position: relative;
   font-size: 1.25rem;
@@ -23,6 +20,7 @@
   user-select: none;
   border-radius: 50%;
   justify-content: center;
+  margin-right: 5px;
 }
 
 .option-icon img {
@@ -32,26 +30,77 @@
   text-align: center;
 }
 
-
-
-
-
-/* .container {
-  width: 100%;
+.container {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
 }
 
-@media (min-width: 576px) {
-  .container {
-    max-width: 540px;
-  }
+/* .converter-container {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+} */
+
+.flex-grid {
+  display: flex;
+  max-width: 1140px;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+}
+.col {
+  margin: 10px;
+  width: calc(100% - 20px);
+}
+.col mat-form-field {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.converter-elements {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 400px;
 }
 
 @media (min-width: 768px) {
   .container {
-    max-width: 720px;
+    width: 750px;
   }
-} */
+}
+
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+  .flex-grid {
+    display: flex;
+    max-width: 1140px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .col {
+    width: unset;
+    flex-grow: 1;
+    margin: 10px;
+  }
+
+  .col mat-form-field {
+    margin: 20px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+}
+
+mat-form-field {
+  display: block;
+}

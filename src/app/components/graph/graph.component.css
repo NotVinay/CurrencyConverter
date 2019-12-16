@@ -3,4 +3,8 @@
   width: 100%;
   display: block;
   max-width: 1040px;
+  margin: auto;
+}
+.graph-title {
+  margin-top: 10px;
 }

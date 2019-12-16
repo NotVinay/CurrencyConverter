@@ -68,39 +68,38 @@ export class GraphComponent implements OnInit {
       ]
     });
   }
-
-  getMaxRate() {
-    let max = 0;
+  
+  /**
+   * Getting the max value from rates
+   */
+  getRatesBounds() {
+    let maxRate = 0;
+    let minRate = Number.MAX_VALUE;
     for (const key in this._historicalRates) {
-      if (this._historicalRates[key] > max) {
-        max = this._historicalRates[key];
+      if (this._historicalRates[key] > maxRate) {
+        maxRate = this._historicalRates[key];
+      }
+      if (this._historicalRates[key] < minRate) {
+        minRate = this._historicalRates[key];
       }
     };
-    return max;
+    return {minRate, maxRate};
   }
 
-  getMinRate() {
-    let min = Number.MAX_VALUE;
-    for (const key in this._historicalRates) {
-      if (this._historicalRates[key] < min) {
-        min = this._historicalRates[key];
-      }
-    };
-    return min;
-  }
-
+  /**
+   * Generates the nodes and edges from the exchange rates data recieved.
+   */
   generateElements() {
     let elements = [];
     const YAxisLength = this.cy.height();
     const XAxisLength = this.cy.width();
-    console.log("X Length", XAxisLength, "Y Length: ", YAxisLength);
-    const minRate = this.getMinRate();
-    const maxRate = this.getMaxRate();
-
+    const { minRate, maxRate } = this.getRatesBounds();
+    
     //adding nodes
     var i = 0;
     var keys = Object.keys(this._historicalRates);
     keys.map(key => {
+      // calculating the position of the nodes relative to canvas
       const xCoordinate = (i / 11) * XAxisLength;
       const yCoordinate = YAxisLength - ((this._historicalRates[key] - minRate) / (maxRate - minRate)) * YAxisLength;
       elements.push({
@@ -128,14 +127,17 @@ export class GraphComponent implements OnInit {
     return elements;
   }
 
+  /**
+   * Updates the nodes and animates them to its new positions.
+   */
   updateElements() {
     const YAxisLength = this.cy.height();
     const XAxisLength = this.cy.width();
-    console.log("X Length", XAxisLength, "Y Length: ", YAxisLength);
-    const minRate = this.getMinRate();
-    const maxRate = this.getMaxRate(); //adding nodes
+    const { minRate, maxRate } = this.getRatesBounds();
+
     var i = 0;
     for (const key in this._historicalRates) {
+      // calculating the position of the nodes relative to canvas
       const xCoordinate = (i / 11) * XAxisLength;
       const yCoordinate = YAxisLength - ((this._historicalRates[key] - minRate) / (maxRate - minRate)) * YAxisLength;
       
@@ -151,19 +153,24 @@ export class GraphComponent implements OnInit {
     };
   }
 
+  /**
+   * Render's graph using the elements received from the parent component
+   */
   updateGraph() {
     if (this.elements) {
       //this.cy.remove(this.elements);
-      this.cy.autolock(false); // to lock the nodes in place
+      this.cy.autolock(false); // unlocking the nodes
+      this.cy.panningEnabled(true);
       this.updateElements();
     } else {
       this.elements = this.cy.add(this.generateElements());
     }
     this.cy.fit(this.elements, 2); // to fit the elements to canvas
     this.cy.zoomingEnabled(false); // to disable zooming
-    this.cy.panningEnabled(false);
-    
+
+    // allowing the graph to animate and than locking it in place
     setTimeout(() => {
+      this.cy.panningEnabled(false);
       this.cy.autolock(true); // to lock the nodes in place
     }, 1000);
   }

@@ -1,35 +1,48 @@
 <div class="container">
-  <div class="converter-container">
-    <div class="form-row mx-4">
-      <div class="form-group col-md-6 px-4">
-        <label for="fromCurrencyCode">From</label>
-        <select [(ngModel)]="fromCurrency.code" id="fromCurrencyCode" name="fromCurrencyCode"
-          (change)="selectsChanged()" class="form-control">
-          <option *ngFor="let currency of currencies" [ngValue]="currency.currency_code">
-            <div class="option-icon">
-              <img alt="country flag" src="{{ currency.country_flag }}" />
-            </div>
-            {{ currency.currency_code + " " + currency.currency_name }}
-          </option>
-        </select>
-        <input [(ngModel)]="fromCurrency.value" type="number" placeholder="0.00" (keyup)="fromValueChanged($event)"
-          class="form-control mt-3" pattern="^[+-]?\d+(\.\d+)?$"/>
+  <div class="converter-elements">
+    <div class="flex-grid">
+      <div class="col">
+        <mat-form-field>
+          <mat-label for="fromCurrencyCode">From</mat-label>
+          <mat-select [(value)]="fromCurrency.code" id="fromCurrencyCode" name="fromCurrencyCode"
+            (selectionChange)="selectsChanged('fromCurrency')" class="form-control">
+            <mat-option *ngFor="let currency of currencies" [value]="currency.currency_code">
+              <div class="option-icon">
+                <img alt="country flag" src="{{ currency.country_flag }}" />
+              </div>
+              {{ currency.currency_code + " " + currency.currency_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="fromCurrency.value" type="number" placeholder="From Amount"
+            (keyup)="fromValueChanged($event)" class="form-control mt-3" pattern="^[+-]?\d+(\.\d+)?$" />
+        </mat-form-field>
       </div>
-      <div class="form-group col-md-6 px-4">
-        <label for="toCurrencyCode">To</label>
-        <select [(ngModel)]="toCurrency.code" id="toCurrencyCode" name="toCurrencyCode" (change)="selectsChanged()"
-          class="form-control">
-          <option *ngFor="let currency of currencies" [ngValue]="currency.currency_code">
-            <div class="option-icon">
-              <img alt="country flag" src="{{ currency.country_flag }}" />
-            </div>
-            {{ currency.currency_code + " " + currency.currency_name }}
-          </option>
-        </select>
-        <input [(ngModel)]="toCurrency.value" type="number" placeholder="0.00" (keyup)="toValueChanged($event)"
-          class="form-control mt-3" pattern="^[+-]?\d+(\.\d+)?$"/>
+      <div class="col">
+        <mat-form-field class="example-full-width">
+          <mat-label for="toCurrencyCode">To</mat-label>
+          <mat-select [(value)]="toCurrency.code" id="toCurrencyCode" name="toCurrencyCode"
+            (selectionChange)="selectsChanged('toCurrency')" class="form-control">
+            <mat-option *ngFor="let currency of currencies" [value]="currency.currency_code">
+              <div class="option-icon">
+                <img alt="country flag" src="{{ currency.country_flag }}" />
+              </div>
+              {{ currency.currency_code + " " + currency.currency_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="toCurrency.value" type="number" placeholder="To amount"
+            (keyup)="toValueChanged($event)" class="form-control mt-3" pattern="^[+-]?\d+(\.\d+)?$" />
+        </mat-form-field>
       </div>
+    </div>
+    <div class="text-center">
+      <h4 class="mat-body-1 caption">Current Rate</h4>
+      <p class="mat-h2 text-center">1 {{fromCurrency.code}} = {{fromCurrency.rate.toFixed(2) + " " + toCurrency.code}}</p>
     </div>
   </div>
   <app-graph [historicalRates]="historicalRates"></app-graph>
+  <h3 class="mat-subheading-1 muted-heading text-center">All figures are live mid-market rates as published by European Central Bank.</h3>
 </div>

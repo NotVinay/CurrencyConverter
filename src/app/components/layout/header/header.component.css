@@ -7,3 +7,10 @@
 .header div {
   margin: auto;
 }
+
+.indigo {
+  color: indigo;
+}
+.pink {
+  color: #E91E63;
+}

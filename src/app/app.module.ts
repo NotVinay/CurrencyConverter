@@ -8,7 +8,8 @@ import { HeaderComponent } from "./components/layout/header/header.component";
 import { HttpClientModule } from "@angular/common/http";
 import { GraphComponent } from "./components/graph/graph.component";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +17,7 @@ import { NoopAnimationsModule } from "@angular/platform-browser/animations";
     HeaderComponent,
     GraphComponent
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, NoopAnimationsModule],
+  imports: [BrowserModule, FormsModule, HttpClientModule, NoopAnimationsModule, MatInputModule, MatSelectModule],
   providers: [],
   bootstrap: [AppComponent]
 })
