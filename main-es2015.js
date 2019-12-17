@@ -45,7 +45,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container\">\n    <h3 class=\"mat-subheading-1 muted-heading text-center\">All figures are live mid-market rates as published by European Central Bank.</h3>\n  <div class=\"converter-elements\">\n    <form>\n    <div class=\"flex-grid\">\n      <div class=\"col\">\n        <mat-form-field>\n          <mat-label for=\"fromCurrencyCode\">From</mat-label>\n          <mat-select [(value)]=\"fromCurrency.code\" id=\"fromCurrencyCode\" name=\"fromCurrencyCode\"\n            (selectionChange)=\"selectsChanged('fromCurrency')\" class=\"form-control\">\n            <mat-select-trigger>\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ fromCurrency.metaData.countryFlag }}\" />\n              </div>\n              {{ fromCurrency.code + \" \" + fromCurrency.metaData.currencyName }}\n            </mat-select-trigger>\n            <mat-option *ngFor=\"let currency of currencies\" [value]=\"currency.currencyCode\">\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ currency.countryFlag }}\" />\n              </div>\n              {{ currency.currencyCode + \" \" + currency.currencyName }}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <mat-form-field>\n          <input matInput [formControl]=\"fromCurrency.value\" type=\"number\" placeholder=\"From Amount\"\n            (keyup)=\"fromValueChanged($event)\" (wheel)=\"fromValueChanged($event)\" class=\"xxl-input\" min=\"0\" [errorStateMatcher]=\"matcher\"/>\n          <mat-error *ngIf=\"toCurrency.value.invalid\">\n            Please enter the amount.\n          </mat-error>\n        </mat-form-field>\n      </div>\n      <div class=\"col\">\n        <mat-form-field class=\"example-full-width\">\n          <mat-label for=\"toCurrencyCode\">To</mat-label>\n          <mat-select [(value)]=\"toCurrency.code\" id=\"toCurrencyCode\" name=\"toCurrencyCode\"\n            (selectionChange)=\"selectsChanged('toCurrency')\" class=\"form-control\">\n            <mat-select-trigger>\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ toCurrency.metaData.countryFlag }}\" />\n              </div>\n              {{ toCurrency.code + \" \" + toCurrency.metaData.currencyName }}\n            </mat-select-trigger>\n            <mat-option *ngFor=\"let currency of currencies\" [value]=\"currency.currencyCode\">\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ currency.countryFlag }}\" />\n              </div>\n              {{ currency.currencyCode + \" \" + currency.currencyName }}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <mat-form-field>\n          <input matInput [formControl]=\"toCurrency.value\" type=\"number\" placeholder=\"To Amount\"\n            (keyup)=\"toValueChanged($event)\" (wheel)=\"toValueChanged($event)\" class=\"xxl-input\" [errorStateMatcher]=\"matcher\" min=\"0\"/>\n          <mat-error *ngIf=\"toCurrency.value.invalid\">\n            Please enter a valid amount.\n          </mat-error>\n        </mat-form-field>\n      </div>\n    </div>\n    </form>\n    <div class=\"text-center\">\n        <h4 class=\"mat-body-1 caption\" [ngClass]=\"{'mat-error': error, 'caption': !error}\">{{ error ? \"Error\" : \"Current Rate\" }}</h4>\n        <p class=\"mat-h2 text-center\">\n          <span *ngIf=\"error\" class=\"mat-error\">{{error}}</span>\n          <span *ngIf=\"!error\">1 {{fromCurrency.code}} = {{fromCurrency.rate.toFixed(2) + \" \" + toCurrency.code}}</span>\n        </p>\n  </div>\n  <app-graph [historicalRates]=\"historicalRates\"></app-graph>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container\">\n    <h3 class=\"mat-subheading-1 muted-heading text-center\">All figures are live mid-market rates as published by European Central Bank.</h3>\n  <div class=\"converter-elements\">\n    <form>\n    <div class=\"flex-grid\">\n      <div class=\"col\">\n        <mat-form-field>\n          <mat-label for=\"fromCurrencyCode\">From</mat-label>\n          <mat-select [(value)]=\"fromCurrency.code\" id=\"fromCurrencyCode\" name=\"fromCurrencyCode\"\n            (selectionChange)=\"selectsChanged('fromCurrency')\" class=\"form-control\">\n            <mat-select-trigger>\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ fromCurrency.metaData.countryFlag }}\" />\n              </div>\n              {{ fromCurrency.code + \" \" + fromCurrency.metaData.currencyName }}\n            </mat-select-trigger>\n            <mat-option *ngFor=\"let currency of currencies\" [value]=\"currency.currencyCode\">\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ currency.countryFlag }}\" />\n              </div>\n              {{ currency.currencyCode + \" \" + currency.currencyName }}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <mat-form-field id=\"fromCurrencyValue\">\n          <input matInput [formControl]=\"fromCurrency.value\" type=\"number\" placeholder=\"From Amount\"\n            (keyup)=\"fromValueChanged($event)\" (wheel)=\"fromValueChanged($event)\" class=\"xxl-input\" min=\"0\" [errorStateMatcher]=\"matcher\"/>\n          <mat-error *ngIf=\"toCurrency.value.invalid\">\n            Please enter the amount.\n          </mat-error>\n        </mat-form-field>\n      </div>\n      <div class=\"col\">\n        <mat-form-field class=\"example-full-width\">\n          <mat-label for=\"toCurrencyCode\">To</mat-label>\n          <mat-select [(value)]=\"toCurrency.code\" id=\"toCurrencyCode\" name=\"toCurrencyCode\"\n            (selectionChange)=\"selectsChanged('toCurrency')\" class=\"form-control\">\n            <mat-select-trigger>\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ toCurrency.metaData.countryFlag }}\" />\n              </div>\n              {{ toCurrency.code + \" \" + toCurrency.metaData.currencyName }}\n            </mat-select-trigger>\n            <mat-option *ngFor=\"let currency of currencies\" [value]=\"currency.currencyCode\">\n              <div class=\"option-icon\">\n                <img alt=\"country flag\" src=\"{{ currency.countryFlag }}\" />\n              </div>\n              {{ currency.currencyCode + \" \" + currency.currencyName }}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <mat-form-field id=\"toCurrencyValue\">\n          <input matInput [formControl]=\"toCurrency.value\" type=\"number\" placeholder=\"To Amount\"\n            (keyup)=\"toValueChanged($event)\" (wheel)=\"toValueChanged($event)\" class=\"xxl-input\" [errorStateMatcher]=\"matcher\" min=\"0\"/>\n          <mat-error *ngIf=\"toCurrency.value.invalid\">\n            Please enter a valid amount.\n          </mat-error>\n        </mat-form-field>\n      </div>\n    </div>\n    </form>\n    <div id=\"result\" class=\"text-center\">\n        <h4 class=\"mat-body-1 caption\" [ngClass]=\"{'mat-error': error, 'caption': !error}\">{{ error ? \"Error\" : \"Current Rate\" }}</h4>\n        <p class=\"mat-h2 text-center\">\n          <span *ngIf=\"error\" class=\"mat-error\">{{error}}</span>\n          <span *ngIf=\"!error\">1 {{fromCurrency.code}} = {{fromCurrency.rate.toFixed(2) + \" \" + toCurrency.code}}</span>\n        </p>\n    </div>\n  </div>\n  <app-graph [historicalRates]=\"historicalRates\"></app-graph>\n</div>\n");
 
 /***/ }),
 
@@ -454,8 +454,6 @@ let ConverterComponent = class ConverterComponent {
     constructor(exchangeRatesService) {
         this.exchangeRatesService = exchangeRatesService;
         this.error = null;
-        this.loading = false;
-        // TODO Add Model for from and to currency
         this.fromCurrency = {
             code: "GBP",
             value: new _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormControl"](0, [
@@ -474,10 +472,8 @@ let ConverterComponent = class ConverterComponent {
         };
         this.matcher = new _shared_errorStateMatcher__WEBPACK_IMPORTED_MODULE_5__["MatErrorStateMatcher"]();
         this.currencies = _shared_currencies__WEBPACK_IMPORTED_MODULE_2__["default"];
-        const fromCurrencyData = this.currencies.filter(currency => currency.currencyCode === this.fromCurrency.code)[0];
-        this.fromCurrency.metaData = fromCurrencyData;
-        const toCurrencyData = this.currencies.filter(currency => currency.currencyCode === this.toCurrency.code)[0];
-        this.toCurrency.metaData = toCurrencyData;
+        this.fromCurrency.metaData = this.currencies.filter(currency => currency.currencyCode === this.fromCurrency.code)[0];
+        this.toCurrency.metaData = this.currencies.filter(currency => currency.currencyCode === this.toCurrency.code)[0];
     }
     ngOnInit() {
         this.fetchExchangeRates();
@@ -489,7 +485,6 @@ let ConverterComponent = class ConverterComponent {
      */
     fetchExchangeRates() {
         let _this = this;
-        this.loading = true;
         this.error = null;
         var promise = new Promise(function (resolve, reject) {
             _this.exchangeRatesService
@@ -498,10 +493,8 @@ let ConverterComponent = class ConverterComponent {
                 _this.fromCurrency.rate = data.rates[_this.toCurrency.code];
                 _this.toCurrency.rate = 1 / data.rates[_this.toCurrency.code];
                 resolve(true);
-                _this.loading = false;
             }, error => {
                 reject(true);
-                _this.loading = false;
                 _this.error = "Error in fetching Exchange Rates";
             });
         });
@@ -511,17 +504,12 @@ let ConverterComponent = class ConverterComponent {
      * Fetches the historical rates.
      */
     fetchHistoricalRates() {
-        this.loading = true;
         this.error = null;
         this.exchangeRatesService
             .fetchHistoricalRates(this.fromCurrency.code, this.toCurrency.code)
             .subscribe(data => {
-            console.log("Historical Rates response", data);
             this.historicalRates = data;
-            this.loading = false;
         }, error => {
-            console.log("error", error);
-            this.loading = false;
             this.error = "Error in fetching historial rates";
         });
     }
@@ -580,7 +568,7 @@ ConverterComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".canvas {\n  height: 200px;\n  width: 100%;\n  display: block;\n  max-width: 1040px;\n  margin: auto;\n}\n.graph-title {\n  margin-top: 10px;\n  color: currentColor;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9ncmFwaC9ncmFwaC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsYUFBYTtFQUNiLFdBQVc7RUFDWCxjQUFjO0VBQ2QsaUJBQWlCO0VBQ2pCLFlBQVk7QUFDZDtBQUNBO0VBQ0UsZ0JBQWdCO0VBQ2hCLG1CQUFtQjtBQUNyQiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvZ3JhcGgvZ3JhcGguY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jYW52YXMge1xuICBoZWlnaHQ6IDIwMHB4O1xuICB3aWR0aDogMTAwJTtcbiAgZGlzcGxheTogYmxvY2s7XG4gIG1heC13aWR0aDogMTA0MHB4O1xuICBtYXJnaW46IGF1dG87XG59XG4uZ3JhcGgtdGl0bGUge1xuICBtYXJnaW4tdG9wOiAxMHB4O1xuICBjb2xvcjogY3VycmVudENvbG9yO1xufSJdfQ== */");
+/* harmony default export */ __webpack_exports__["default"] = (".canvas {\n  height: 200px;\n  width: 100%;\n  display: block;\n  max-width: 1040px;\n  margin: 10px auto;\n}\n.graph-title {\n  margin-top: 10px;\n  color: currentColor;\n}\n@media (min-width: 992px) {\n  .canvas {\n    margin: 20px auto;\n  }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9ncmFwaC9ncmFwaC5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsYUFBYTtFQUNiLFdBQVc7RUFDWCxjQUFjO0VBQ2QsaUJBQWlCO0VBQ2pCLGlCQUFpQjtBQUNuQjtBQUNBO0VBQ0UsZ0JBQWdCO0VBQ2hCLG1CQUFtQjtBQUNyQjtBQUVBO0VBQ0U7SUFDRSxpQkFBaUI7RUFDbkI7QUFDRiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvZ3JhcGgvZ3JhcGguY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5jYW52YXMge1xuICBoZWlnaHQ6IDIwMHB4O1xuICB3aWR0aDogMTAwJTtcbiAgZGlzcGxheTogYmxvY2s7XG4gIG1heC13aWR0aDogMTA0MHB4O1xuICBtYXJnaW46IDEwcHggYXV0bztcbn1cbi5ncmFwaC10aXRsZSB7XG4gIG1hcmdpbi10b3A6IDEwcHg7XG4gIGNvbG9yOiBjdXJyZW50Q29sb3I7XG59XG5cbkBtZWRpYSAobWluLXdpZHRoOiA5OTJweCkge1xuICAuY2FudmFzIHtcbiAgICBtYXJnaW46IDIwcHggYXV0bztcbiAgfVxufSJdfQ== */");
 
 /***/ }),
 
@@ -712,7 +700,6 @@ let GraphComponent = class GraphComponent {
         const YAxisLength = this.cy.height();
         const XAxisLength = this.cy.width();
         const { minRate, maxRate } = this.getRatesBounds();
-        console.log("X-Axis", XAxisLength, "Y-Axis", YAxisLength);
         var i = 0;
         for (const key in this._historicalRates) {
             // calculating the position of the nodes relative to canvas
@@ -721,9 +708,6 @@ let GraphComponent = class GraphComponent {
             this.cy.$(`node#${key}`).data({
                 label: `${MONTHS[key.substr(5, 7)]} ${key.substr(0, 4)} - ${this._historicalRates[key].toFixed(2)}`
             });
-            if (key == "2019-12") {
-                console.log("X", xCoordinate, "Y", yCoordinate);
-            }
             this.cy.elements(`node#${key}`).animate({
                 position: { x: xCoordinate, y: yCoordinate }
             }, {
