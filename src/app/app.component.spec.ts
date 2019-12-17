@@ -1,12 +1,25 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './components/layout/header/header.component';
+import { ConverterComponent } from './components/converter/converter.component';
+import { GraphComponent } from './components/graph/graph.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        HeaderComponent,
+        ConverterComponent,
+        GraphComponent
       ],
+      imports: [FormsModule, ReactiveFormsModule, HttpClientModule, NoopAnimationsModule, MatInputModule, MatSelectModule, MatFormFieldModule],
     }).compileComponents();
   }));
 
@@ -20,12 +33,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('CurrencyConverter');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('CurrencyConverter app is running!');
   });
 });
