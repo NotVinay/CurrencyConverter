@@ -1,5 +1,7 @@
 <div class="container">
+    <h3 class="mat-subheading-1 muted-heading text-center">All figures are live mid-market rates as published by European Central Bank.</h3>
   <div class="converter-elements">
+    <form>
     <div class="flex-grid">
       <div class="col">
         <mat-form-field>
@@ -21,8 +23,14 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput [(ngModel)]="fromCurrency.value" type="number" placeholder="From Amount"
-            (keyup)="fromValueChanged($event)" class="form-control mt-3" pattern="^[+-]?\d+(\.\d+)?$" />
+          <input matInput [formControl]="fromCurrency.value" type="number" placeholder="From Amount"
+            (keyup)="fromValueChanged($event)" class="xxl-input" min="0" [errorStateMatcher]="matcher"/>
+          <mat-error *ngIf="fromCurrency.value.hasError('required')">
+            Please enter the amount.
+          </mat-error>
+          <mat-error *ngIf="fromCurrency.value.hasError('pattern')">
+              Please valid amount.
+            </mat-error>
         </mat-form-field>
       </div>
       <div class="col">
@@ -45,16 +53,22 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
-          <input matInput [(ngModel)]="toCurrency.value" type="number" placeholder="To amount"
-            (keyup)="toValueChanged($event)" class="form-control mt-3" pattern="^[+-]?\d+(\.\d+)?$" />
+          <input matInput [formControl]="toCurrency.value" type="number" placeholder="To Amount"
+            (keyup)="toValueChanged($event)" class="xxl-input" [errorStateMatcher]="matcher" min="0"/>
+          <mat-error *ngIf="toCurrency.value.hasError('required')">
+            Please enter the amount.
+          </mat-error>
+          <mat-error *ngIf="toCurrency.value.errors?.pattern">
+              Please valid amount.
+            </mat-error>
         </mat-form-field>
       </div>
     </div>
+    </form>
     <div class="text-center">
       <h4 class="mat-body-1 caption">Current Rate</h4>
       <p class="mat-h2 text-center">1 {{fromCurrency.code}} = {{fromCurrency.rate.toFixed(2) + " " + toCurrency.code}}</p>
     </div>
   </div>
   <app-graph [historicalRates]="historicalRates"></app-graph>
-  <h3 class="mat-subheading-1 muted-heading text-center">All figures are live mid-market rates as published by European Central Bank.</h3>
 </div>

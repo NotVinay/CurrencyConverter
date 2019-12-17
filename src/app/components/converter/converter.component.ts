@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import SUPPORTED_CURRENCIES from "../../shared/currencies";
 import { ExchangeRatesService } from "../../services/exchange-rates.service";
-import { send } from 'q';
+import { FormControl, Validators } from '@angular/forms';
+import { MatErrorStateMatcher } from "../../shared/errorStateMatcher"
 
 @Component({
   selector: "app-converter",
@@ -15,17 +16,21 @@ export class ConverterComponent implements OnInit {
   // TODO Add Model for from and to currency
   fromCurrency = {
     code: "GBP",
-    value: 0,
+    value: new FormControl(0, [
+      Validators.required]),
     rate: 0,
     metaData: {}
   };
 
   toCurrency = {
     code: "USD",
-    value: 0,
+    value: new FormControl(0, [
+      Validators.required]),
     rate: 0,
     metaData: {}
   };
+
+  matcher = new MatErrorStateMatcher();
 
   historicalRates: Object;
 
@@ -88,7 +93,7 @@ export class ConverterComponent implements OnInit {
     const currencyData = this.currencies.filter(currency => currency.currencyCode === this[sender].code)[0];
     this[sender].metaData = currencyData
     this.fetchExchangeRates().then(()=>{
-      this[target].value = Math.round(this[sender].value * this[sender].rate * 100) / 100;
+      this[target].value.setValue(Math.round(this[sender].value.value * this[sender].rate * 100) / 100);
     })
     this.fetchHistoricalRates();
   }
@@ -97,13 +102,14 @@ export class ConverterComponent implements OnInit {
    * This function is called when from currency value is changed.
    */
   fromValueChanged(event: any) {
-    this.toCurrency.value = Math.round(event.target.value * this.fromCurrency.rate * 100) / 100;
+    this.toCurrency.value.setValue(Math.round(event.target.value * this.fromCurrency.rate * 100) / 100);
   }
 
   /**
    * This function is called when to currency value is changed.
    */
   toValueChanged(event: any) {
-    this.fromCurrency.value = Math.round(event.target.value * this.toCurrency.rate * 100) / 100;
+    this.fromCurrency.value.setValue(Math.round(event.target.value * this.toCurrency.rate * 100) / 100);
+    console.log(this.toCurrency.value.errors)
   }
 }

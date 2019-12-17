@@ -152,7 +152,7 @@ export class GraphComponent implements OnInit {
       this.cy.elements(`node#${key}`).animate({
         position: { x: xCoordinate, y: yCoordinate }
       }, {
-        duration: 500
+        duration: 1000
       });
       i += 1;
     };
