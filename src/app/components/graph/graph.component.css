@@ -3,9 +3,15 @@
   width: 100%;
   display: block;
   max-width: 1040px;
-  margin: auto;
+  margin: 10px auto;
 }
 .graph-title {
   margin-top: 10px;
   color: currentColor;
+}
+
+@media (min-width: 992px) {
+  .canvas {
+    margin: 20px auto;
+  }
 }

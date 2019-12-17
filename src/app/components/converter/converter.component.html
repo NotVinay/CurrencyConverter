@@ -65,6 +65,7 @@
           <span *ngIf="error" class="mat-error">{{error}}</span>
           <span *ngIf="!error">1 {{fromCurrency.code}} = {{fromCurrency.rate.toFixed(2) + " " + toCurrency.code}}</span>
         </p>
+    </div>
   </div>
   <app-graph [historicalRates]="historicalRates"></app-graph>
 </div>
