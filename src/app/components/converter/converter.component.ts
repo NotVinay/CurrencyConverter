@@ -103,7 +103,9 @@ export class ConverterComponent implements OnInit {
     const currencyData = this.currencies.filter(currency => currency.currencyCode === this[sender].code)[0];
     this[sender].metaData = currencyData
     this.fetchExchangeRates().then(()=>{
-      this[target].value.setValue(Math.round(this[sender].value.value * this[sender].rate * 100) / 100);
+      if(this[sender].value.valid) {
+        this[target].value.setValue(Math.round(this[sender].value.value * this[sender].rate * 100) / 100);
+      }
     })
     this.fetchHistoricalRates();
   }
