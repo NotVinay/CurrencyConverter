@@ -59,7 +59,7 @@
       </div>
     </div>
     </form>
-    <div class="text-center">
+    <div id="result" class="text-center">
         <h4 class="mat-body-1 caption" [ngClass]="{'mat-error': error, 'caption': !error}">{{ error ? "Error" : "Current Rate" }}</h4>
         <p class="mat-h2 text-center">
           <span *ngIf="error" class="mat-error">{{error}}</span>

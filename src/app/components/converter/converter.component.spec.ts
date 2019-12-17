@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ExchangeRatesService } from 'src/app/services/exchange-rates.service';
-import { of } from 'rxjs'
+import { of, throwError } from 'rxjs'
 import { By } from '@angular/platform-browser';
 
 describe('ConverterComponent', () => {
@@ -48,7 +48,18 @@ describe('ConverterComponent', () => {
     fixture.whenStable().then(() => {
       expect(component.fromCurrency.rate).toEqual(1.23)
     })
-    expect(component).toBeTruthy();
+  });
+
+  it('should display an error when fetching exchange rate fails', async() => {
+    let errorHeading = fixture.debugElement.query(By.css('#result h4')).nativeElement;
+    let errorText = fixture.debugElement.query(By.css('#result p')).nativeElement;
+    let exchangeRatesService = fixture.debugElement.injector.get(ExchangeRatesService)
+    let spy = spyOn(exchangeRatesService, 'fetchExchangeRate').and.returnValue(throwError(new Error('Test error')));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(errorHeading.textContent).toContain("Error")
+      expect(errorText.textContent).toContain("Test error")
+    })
   });
 
 
@@ -73,10 +84,21 @@ describe('ConverterComponent', () => {
     fixture.whenStable().then(() => {
       expect(component.historicalRates).toEqual(dummyData)
     })
-    expect(component).toBeTruthy();
   });
 
-  it('should update to amount when from amount changes', async() => {
+  it('should display an error when fetching historical rates fails', async() => {
+    let errorHeading = fixture.debugElement.query(By.css('#result h4')).nativeElement;
+    let errorText = fixture.debugElement.query(By.css('#result p')).nativeElement;
+    let exchangeRatesService = fixture.debugElement.injector.get(ExchangeRatesService)
+    let spy = spyOn(exchangeRatesService, 'fetchHistoricalRates').and.returnValue(throwError(new Error('Test error')));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(errorHeading.textContent).toContain("Error")
+      expect(errorText.textContent).toContain("Test error")
+    })
+  });
+
+  it('should update to amount when from amount changes', () => {
     let fromInput = fixture.debugElement.query(By.css('#fromCurrencyValue input')).nativeElement;
     let toInput = fixture.debugElement.query(By.css('#toCurrencyValue input')).nativeElement;
     fromInput.value = 2.21;
@@ -84,18 +106,16 @@ describe('ConverterComponent', () => {
     fixture.detectChanges();
     fromInput.dispatchEvent(new KeyboardEvent('keyup', {code: 'Enter'}));
     fixture.detectChanges();
-    fixture.detectChanges();
     expect(toInput.value).toBe((2.21*1.23).toFixed(2));
   });
 
-  it('should update from amount when to amount changes', async() => {
+  it('should update from amount when to amount changes', () => {
     let fromInput = fixture.debugElement.query(By.css('#fromCurrencyValue input')).nativeElement;
     let toInput = fixture.debugElement.query(By.css('#toCurrencyValue input')).nativeElement;
     toInput.value = 2.21;
     component.toCurrency.rate = 1.23;
     fixture.detectChanges();
     toInput.dispatchEvent(new KeyboardEvent('keyup', {code: 'Enter'}));
-    fixture.detectChanges();
     fixture.detectChanges();
     expect(fromInput.value).toBe((2.21*1.23).toFixed(2));
   });
