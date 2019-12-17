@@ -1,11 +1,17 @@
 .header {
-  height: 50px;
+  height: 80px;
   text-align: center;
   display: flex;
 }
 
 .header div {
   margin: auto;
+}
+
+.logo {
+  letter-spacing: 2px;
+  font-variant-caps: all-small-caps;
+  font-weight: 700;
 }
 
 .indigo {

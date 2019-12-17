@@ -12,16 +12,24 @@
   color: rgba(0,0,0,.54);
 }
 
-.xxl-input {
-  font-size: xx-large;
+
+/* REMOVING THE STEPPERS FROM INPUT */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 
 /*
 * CURRENCY SELECT OPTION ICON CSS
 */
+.xxl-input {
+  font-size: x-large;
+}
+
 .option-icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   display: inline-flex;
   overflow: hidden;
   position: relative;
@@ -43,11 +51,20 @@
   text-align: center;
 }
 
+@media (min-width: 992px) {
+  .xxl-input {
+    font-size: x-large;
+  }
+  .option-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 
 /*
 * RESPONSIVE CONTAINER CSS
 */
-
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -62,7 +79,7 @@
   padding: 10px;
 }
 .col {
-  margin: 10px;
+  margin: auto;
   width: calc(100% - 20px);
 }
 .col mat-form-field {

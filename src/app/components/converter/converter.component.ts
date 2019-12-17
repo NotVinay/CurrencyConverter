@@ -13,6 +13,10 @@ export class ConverterComponent implements OnInit {
 
   currencies: any; // to store supported currencies
 
+  error = null;
+
+  loading = false
+
   // TODO Add Model for from and to currency
   fromCurrency = {
     code: "GBP",
@@ -35,13 +39,11 @@ export class ConverterComponent implements OnInit {
   historicalRates: Object;
 
   constructor(private exchangeRatesService: ExchangeRatesService) {
-    console.log(SUPPORTED_CURRENCIES);
     this.currencies = SUPPORTED_CURRENCIES;
     const fromCurrencyData = this.currencies.filter(currency => currency.currencyCode === this.fromCurrency.code)[0];
     this.fromCurrency.metaData = fromCurrencyData
     const toCurrencyData = this.currencies.filter(currency => currency.currencyCode === this.toCurrency.code)[0];
     this.toCurrency.metaData = toCurrencyData
-    console.log(this.fromCurrency)
   }
 
   ngOnInit() {
@@ -55,17 +57,20 @@ export class ConverterComponent implements OnInit {
    */
   fetchExchangeRates(): Promise<any> {
     let _this = this;
+    this.loading = true
+    this.error = null
     var promise = new Promise(function(resolve, reject) {
       _this.exchangeRatesService
       .fetchExchangeRate(_this.fromCurrency.code, _this.toCurrency.code)
       .subscribe(data => {
-        console.log("ExchangeRatesAPI response", data);
         _this.fromCurrency.rate = data.rates[_this.toCurrency.code];
         _this.toCurrency.rate = 1 / data.rates[_this.toCurrency.code];
         resolve(true)
+        _this.loading = false
       }, error=> {
-        console.log("Error in fetching exchange rates")
         reject(true)
+        _this.loading = false
+        _this.error = "Error in fetching Exchange Rates"
       });
     });
     return promise;
@@ -75,13 +80,18 @@ export class ConverterComponent implements OnInit {
    * Fetches the historical rates.
    */
   fetchHistoricalRates() {
+    this.loading = true
+    this.error = null
     this.exchangeRatesService
       .fetchHistoricalRates(this.fromCurrency.code, this.toCurrency.code)
       .subscribe(data => {
         console.log("Historical Rates response", data);
         this.historicalRates = data;
+        this.loading = false
       }, error=> {
-        console.log("Error in fetching exchange rates")
+        console.log("error", error)
+        this.loading = false
+        this.error = "Error in fetching historial rates"
       });
   }
 
@@ -102,14 +112,17 @@ export class ConverterComponent implements OnInit {
    * This function is called when from currency value is changed.
    */
   fromValueChanged(event: any) {
-    this.toCurrency.value.setValue(Math.round(event.target.value * this.fromCurrency.rate * 100) / 100);
+    if(this.fromCurrency.value.valid) {
+      this.toCurrency.value.setValue(Math.round(event.target.value * this.fromCurrency.rate * 100) / 100);
+    }
   }
 
   /**
    * This function is called when to currency value is changed.
    */
   toValueChanged(event: any) {
-    this.fromCurrency.value.setValue(Math.round(event.target.value * this.toCurrency.rate * 100) / 100);
-    console.log(this.toCurrency.value.errors)
+    if(this.toCurrency.value.valid) {
+      this.fromCurrency.value.setValue(Math.round(event.target.value * this.toCurrency.rate * 100) / 100);
+    }
   }
 }

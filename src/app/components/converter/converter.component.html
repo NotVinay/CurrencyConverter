@@ -24,13 +24,10 @@
         </mat-form-field>
         <mat-form-field>
           <input matInput [formControl]="fromCurrency.value" type="number" placeholder="From Amount"
-            (keyup)="fromValueChanged($event)" class="xxl-input" min="0" [errorStateMatcher]="matcher"/>
-          <mat-error *ngIf="fromCurrency.value.hasError('required')">
+            (keyup)="fromValueChanged($event)" (wheel)="fromValueChanged($event)" class="xxl-input" min="0" [errorStateMatcher]="matcher"/>
+          <mat-error *ngIf="toCurrency.value.invalid">
             Please enter the amount.
           </mat-error>
-          <mat-error *ngIf="fromCurrency.value.hasError('pattern')">
-              Please valid amount.
-            </mat-error>
         </mat-form-field>
       </div>
       <div class="col">
@@ -54,21 +51,20 @@
         </mat-form-field>
         <mat-form-field>
           <input matInput [formControl]="toCurrency.value" type="number" placeholder="To Amount"
-            (keyup)="toValueChanged($event)" class="xxl-input" [errorStateMatcher]="matcher" min="0"/>
-          <mat-error *ngIf="toCurrency.value.hasError('required')">
-            Please enter the amount.
+            (keyup)="toValueChanged($event)" (wheel)="toValueChanged($event)" class="xxl-input" [errorStateMatcher]="matcher" min="0"/>
+          <mat-error *ngIf="toCurrency.value.invalid">
+            Please enter a valid amount.
           </mat-error>
-          <mat-error *ngIf="toCurrency.value.errors?.pattern">
-              Please valid amount.
-            </mat-error>
         </mat-form-field>
       </div>
     </div>
     </form>
     <div class="text-center">
-      <h4 class="mat-body-1 caption">Current Rate</h4>
-      <p class="mat-h2 text-center">1 {{fromCurrency.code}} = {{fromCurrency.rate.toFixed(2) + " " + toCurrency.code}}</p>
-    </div>
+        <h4 class="mat-body-1 caption" [ngClass]="{'mat-error': error, 'caption': !error}">{{ error ? "Error" : "Current Rate" }}</h4>
+        <p class="mat-h2 text-center">
+          <span *ngIf="error" class="mat-error">{{error}}</span>
+          <span *ngIf="!error">1 {{fromCurrency.code}} = {{fromCurrency.rate.toFixed(2) + " " + toCurrency.code}}</span>
+        </p>
   </div>
   <app-graph [historicalRates]="historicalRates"></app-graph>
 </div>
