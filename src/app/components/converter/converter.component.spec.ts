@@ -1,14 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ConverterComponent } from './converter.component';
 import { GraphComponent } from '../graph/graph.component';
-import { MatFormField, MatError, MatLabel, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatSelect, MatSelectTrigger, MatSelectModule } from '@angular/material/select';
-import { MatOption } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ExchangeRatesService } from 'src/app/services/exchange-rates.service';
+import { of } from 'rxjs'
+import { By } from '@angular/platform-browser';
 
 describe('ConverterComponent', () => {
   let component: ConverterComponent;
@@ -33,5 +34,69 @@ describe('ConverterComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should retrieve the exchange rate', async() => {
+    let exchangeRatesService = fixture.debugElement.injector.get(ExchangeRatesService)
+    let dummyData = {
+      rates: {
+        USD: 1.23
+      }
+    }
+    let spy = spyOn(exchangeRatesService, 'fetchExchangeRate').and.returnValue(of(dummyData));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.fromCurrency.rate).toEqual(1.23)
+    })
+    expect(component).toBeTruthy();
+  });
+
+
+  it('should retrieve the historial rates', async() => {
+    let exchangeRatesService = fixture.debugElement.injector.get(ExchangeRatesService)
+    let dummyData = {
+      '2019-01': 1.2898958840190473,
+      '2019-02': 1.3006588375894739,
+      '2019-03': 1.3166293173699999,
+      '2019-04': 1.3036761502421055,
+      '2019-05': 1.2821680706666667,
+      '2019-06': 1.2676715292105263,
+      '2019-07': 1.2465593665909092,
+      '2019-08': 1.2155185257523808,
+      '2019-09': 1.23659020485,
+      '2019-10': 1.2647610716954545,
+      '2019-11': 1.288256926955,
+      '2019-12': 1.3174588555454545
+    }
+    let spy = spyOn(exchangeRatesService, 'fetchHistoricalRates').and.returnValue(of(dummyData));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(component.historicalRates).toEqual(dummyData)
+    })
+    expect(component).toBeTruthy();
+  });
+
+  it('should update to amount when from amount changes', async() => {
+    let fromInput = fixture.debugElement.query(By.css('#fromCurrencyValue input')).nativeElement;
+    let toInput = fixture.debugElement.query(By.css('#toCurrencyValue input')).nativeElement;
+    fromInput.value = 2.21;
+    component.fromCurrency.rate = 1.23;
+    fixture.detectChanges();
+    fromInput.dispatchEvent(new KeyboardEvent('keyup', {code: 'Enter'}));
+    fixture.detectChanges();
+    fixture.detectChanges();
+    expect(toInput.value).toBe((2.21*1.23).toFixed(2));
+  });
+
+  it('should update from amount when to amount changes', async() => {
+    let fromInput = fixture.debugElement.query(By.css('#fromCurrencyValue input')).nativeElement;
+    let toInput = fixture.debugElement.query(By.css('#toCurrencyValue input')).nativeElement;
+    toInput.value = 2.21;
+    component.toCurrency.rate = 1.23;
+    fixture.detectChanges();
+    toInput.dispatchEvent(new KeyboardEvent('keyup', {code: 'Enter'}));
+    fixture.detectChanges();
+    fixture.detectChanges();
+    expect(fromInput.value).toBe((2.21*1.23).toFixed(2));
   });
 });

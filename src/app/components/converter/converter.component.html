@@ -22,7 +22,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field id="fromCurrencyValue">
           <input matInput [formControl]="fromCurrency.value" type="number" placeholder="From Amount"
             (keyup)="fromValueChanged($event)" (wheel)="fromValueChanged($event)" class="xxl-input" min="0" [errorStateMatcher]="matcher"/>
           <mat-error *ngIf="toCurrency.value.invalid">
@@ -49,7 +49,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field id="toCurrencyValue">
           <input matInput [formControl]="toCurrency.value" type="number" placeholder="To Amount"
             (keyup)="toValueChanged($event)" (wheel)="toValueChanged($event)" class="xxl-input" [errorStateMatcher]="matcher" min="0"/>
           <mat-error *ngIf="toCurrency.value.invalid">

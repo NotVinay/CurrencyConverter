@@ -15,9 +15,6 @@ export class ConverterComponent implements OnInit {
 
   error = null;
 
-  loading = false
-
-  // TODO Add Model for from and to currency
   fromCurrency = {
     code: "GBP",
     value: new FormControl(0, [
@@ -57,7 +54,6 @@ export class ConverterComponent implements OnInit {
    */
   fetchExchangeRates(): Promise<any> {
     let _this = this;
-    this.loading = true
     this.error = null
     var promise = new Promise(function(resolve, reject) {
       _this.exchangeRatesService
@@ -66,10 +62,8 @@ export class ConverterComponent implements OnInit {
         _this.fromCurrency.rate = data.rates[_this.toCurrency.code];
         _this.toCurrency.rate = 1 / data.rates[_this.toCurrency.code];
         resolve(true)
-        _this.loading = false
       }, error=> {
         reject(true)
-        _this.loading = false
         _this.error = "Error in fetching Exchange Rates"
       });
     });
@@ -80,17 +74,12 @@ export class ConverterComponent implements OnInit {
    * Fetches the historical rates.
    */
   fetchHistoricalRates() {
-    this.loading = true
     this.error = null
     this.exchangeRatesService
       .fetchHistoricalRates(this.fromCurrency.code, this.toCurrency.code)
       .subscribe(data => {
-        console.log("Historical Rates response", data);
         this.historicalRates = data;
-        this.loading = false
       }, error=> {
-        console.log("error", error)
-        this.loading = false
         this.error = "Error in fetching historial rates"
       });
   }
