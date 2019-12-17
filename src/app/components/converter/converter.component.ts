@@ -37,10 +37,8 @@ export class ConverterComponent implements OnInit {
 
   constructor(private exchangeRatesService: ExchangeRatesService) {
     this.currencies = SUPPORTED_CURRENCIES;
-    const fromCurrencyData = this.currencies.filter(currency => currency.currencyCode === this.fromCurrency.code)[0];
-    this.fromCurrency.metaData = fromCurrencyData
-    const toCurrencyData = this.currencies.filter(currency => currency.currencyCode === this.toCurrency.code)[0];
-    this.toCurrency.metaData = toCurrencyData
+    this.fromCurrency.metaData = this.currencies.filter(currency => currency.currencyCode === this.fromCurrency.code)[0];
+    this.toCurrency.metaData = this.currencies.filter(currency => currency.currencyCode === this.toCurrency.code)[0];
   }
 
   ngOnInit() {
