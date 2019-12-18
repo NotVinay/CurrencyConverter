@@ -20,7 +20,7 @@ export class ConverterComponent implements OnInit {
     value: new FormControl(0, [
       Validators.required]),
     rate: 0,
-    metaData: {}
+    metaData: <any>{}
   };
 
   toCurrency = {
@@ -28,7 +28,7 @@ export class ConverterComponent implements OnInit {
     value: new FormControl(0, [
       Validators.required]),
     rate: 0,
-    metaData: {}
+    metaData: <any>{}
   };
 
   matcher = new MatErrorStateMatcher();
