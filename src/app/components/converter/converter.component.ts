@@ -52,7 +52,7 @@ export class ConverterComponent implements OnInit {
    */
   fetchExchangeRates(): Promise<any> {
     let _this = this;
-    this.error = null
+    _this.error = null
     var promise = new Promise(function(resolve, reject) {
       _this.exchangeRatesService
       .fetchExchangeRate(_this.fromCurrency.code, _this.toCurrency.code)
@@ -61,8 +61,8 @@ export class ConverterComponent implements OnInit {
         _this.toCurrency.rate = 1 / data.rates[_this.toCurrency.code];
         resolve(true)
       }, error=> {
-        reject(true)
         _this.error = "Error in fetching Exchange Rates"
+        reject(true)
       });
     });
     return promise;
