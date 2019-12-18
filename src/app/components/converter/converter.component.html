@@ -25,7 +25,7 @@
         <mat-form-field id="fromCurrencyValue">
           <input matInput [formControl]="fromCurrency.value" type="number" placeholder="From Amount"
             (keyup)="fromValueChanged($event)" (wheel)="fromValueChanged($event)" class="xxl-input" min="0" [errorStateMatcher]="matcher"/>
-          <mat-error *ngIf="toCurrency.value.invalid">
+          <mat-error *ngIf="fromCurrency.value.invalid">
             Please enter the amount.
           </mat-error>
         </mat-form-field>
